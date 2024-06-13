@@ -99,13 +99,13 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     std::string args_str = recv_buf.substr(4 + header_size, args_size);
 
     // 打印调试信息
-    std::cout << "===============================================" << std::endl;
+    std::cout << "====================rpc provider====================" << std::endl;
     std::cout << "header_size : " << header_size << std::endl;
     std::cout << "service_name : " << service_name << std::endl;
     std::cout << "method_name : " << method_name << std::endl;
     std::cout << "args_size : " << args_size << std::endl;
     std::cout << "args_str : " << args_str << std::endl;
-    std::cout << "===============================================" << std::endl;
+    std::cout << "====================================================" << std::endl;
 
     // 获取service对象和Method对象
     auto service_item = m_serviceMap.find(service_name);
