@@ -1,0 +1,47 @@
+[
+{
+  "directory": "/home/song/rpc/build/src",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/rpc.dir/rpc_config.cpp.o -c /home/song/rpc/src/rpc_config.cpp",
+  "file": "/home/song/rpc/src/rpc_config.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/src",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/rpc.dir/rpc_application.cpp.o -c /home/song/rpc/src/rpc_application.cpp",
+  "file": "/home/song/rpc/src/rpc_application.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/src",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/rpc.dir/rpc_header.pb.cc.o -c /home/song/rpc/src/rpc_header.pb.cc",
+  "file": "/home/song/rpc/src/rpc_header.pb.cc"
+},
+{
+  "directory": "/home/song/rpc/build/src",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/rpc.dir/rpc_provider.cpp.o -c /home/song/rpc/src/rpc_provider.cpp",
+  "file": "/home/song/rpc/src/rpc_provider.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/src",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/rpc.dir/rpc_channel.cpp.o -c /home/song/rpc/src/rpc_channel.cpp",
+  "file": "/home/song/rpc/src/rpc_channel.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/example/callee",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/provider.dir/userservice.cpp.o -c /home/song/rpc/example/callee/userservice.cpp",
+  "file": "/home/song/rpc/example/callee/userservice.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/example/callee",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/provider.dir/__/user.pb.cc.o -c /home/song/rpc/example/user.pb.cc",
+  "file": "/home/song/rpc/example/user.pb.cc"
+},
+{
+  "directory": "/home/song/rpc/build/example/caller",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/consumer.dir/callservice.cpp.o -c /home/song/rpc/example/caller/callservice.cpp",
+  "file": "/home/song/rpc/example/caller/callservice.cpp"
+},
+{
+  "directory": "/home/song/rpc/build/example/caller",
+  "command": "/usr/bin/c++   -I/home/song/rpc/src/include -I/home/song/rpc/example  -g   -o CMakeFiles/consumer.dir/__/user.pb.cc.o -c /home/song/rpc/example/user.pb.cc",
+  "file": "/home/song/rpc/example/user.pb.cc"
+}
+]
