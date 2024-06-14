@@ -1,2 +1,5 @@
 # 不上传build文件夹
 build/
+
+# 不上传.vscode
+.vscode/
