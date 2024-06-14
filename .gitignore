@@ -2,4 +2,4 @@
 build/
 
 # 不上传.vscode
-.vscode/
+.vscode
