@@ -5,6 +5,7 @@
 #include "rpc_provider.h"
 #include "rpc_application.h"
 #include "friend.pb.h"
+#include "rpc_logger.h"
 
 class UserService : public fixbug::UserServiceRPC
 {
@@ -108,6 +109,9 @@ int main(int argc, char** argv) {
     // us.Login("xxx", "xxx");
 
     // RPC配置初始化 provider -i config.conf
+    LOG_INFO("fist one log !");
+    LOG_ERR("%s:%d", __FILE__, __LINE__);
+
     RpcApplication::Init(argc, argv);
 
     // provider是一个网络服务对象，发布UserService到一个RPC节点

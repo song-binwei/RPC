@@ -3,3 +3,6 @@ build/
 
 # 不上传.vscode
 .vscode
+
+# 不上传
+01_study/

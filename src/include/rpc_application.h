@@ -1,6 +1,8 @@
 #pragma once
 
 #include "rpc_config.h"
+#include "rpc_channel.h"
+#include "rpc_controller.h"
 
 // 框架的基础类，用于提供初始化等操作
 class RpcApplication 
