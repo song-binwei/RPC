@@ -1,7 +1,7 @@
 #include "rpc_provider.h"
 #include "rpc_application.h"
 #include "rpc_header.pb.h"
-
+#include "util_zookeeper.h"
 
 // 发布RPC方法的函数接口
 
@@ -51,6 +51,26 @@ void RpcProvider::Run() {
     // 设置muduo库线程数量
     server.setThreadNum(4);
 
+    // 把当前RPC节点上要发布的服务全部注册到zk上面，让rpc client可以从zk上发现服务
+    // session timeout   30s     zkclient 网络I/O线程  1/3 * timeout 时间发送ping消息
+    ZkClient zkCli;
+    zkCli.Start();
+    // 注册service_name为永久性节点    method_name为临时性节点
+    for (auto &service_point : m_serviceMap) 
+    {
+        // /service_name   /UserServiceRpc
+        std::string service_path = "/" + service_point.first;
+        zkCli.Create(service_path.c_str(), nullptr, 0);
+        for (auto &method_point : service_point.second.m_methodMap)
+        {
+            // /service_name/method_name   /UserServiceRpc/Login 存储当前这个rpc服务节点主机的ip和port
+            std::string method_path = service_path + "/" + method_point.first;
+            char method_data[128] = {0};
+            sprintf(method_data, "%s:%d", ip.c_str(), port);
+            zkCli.Create(method_path.c_str(), method_data, strlen(method_data), ZOO_EPHEMERAL);
+        } 
+    }
+    
     // 启动服务
     server.start();
     std::cout << "RpcProvider start " << "ip : " << ip << " port : " << port << std::endl;

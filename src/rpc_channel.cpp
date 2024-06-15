@@ -1,6 +1,6 @@
 #include "rpc_channel.h"
 #include "rpc_header.pb.h"
-#include "rpc_application.h"
+#include "util_zookeeper.h"
 #include <string>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -71,8 +71,27 @@ void RpcChannelMethod::CallMethod(const google::protobuf::MethodDescriptor* meth
         return;
     }
     // 获取RPC服务的地址和端口
-    std::string ip = RpcApplication::GetInstance().GetConfig().Load("rpcserverip");
-    uint16_t port = atoi(RpcApplication::GetInstance().GetConfig().Load("rpcserverport").c_str());
+    // std::string ip = RpcApplication::GetInstance().GetConfig().Load("rpcserverip");
+    // uint16_t port = atoi(RpcApplication::GetInstance().GetConfig().Load("rpcserverport").c_str());
+    ZkClient zkCli;
+    zkCli.Start();
+    std::string method_path = "/" + service_name + "/" + method_name;
+    std::string host_data = zkCli.GetData(method_path.c_str());
+    if (host_data == "") 
+    {
+        controller->SetFailed(method_path + " is not exist !");
+        return;
+    }
+    int idx = host_data.find(":");
+    if (idx == -1)
+    {
+        controller->SetFailed(method_path + " address is error !");
+        return;
+    }
+    std::string ip = host_data.substr(0, idx);
+    uint16_t port = atoi(host_data.substr(idx + 1, host_data.size() - idx).c_str());
+ 
+
     
     // 设置发起网络请求需要的port和address
     struct sockaddr_in server_addr;

@@ -5,6 +5,7 @@ set(SRC_LIST rpc_config.cpp
              rpc_provider.cpp 
              rpc_channel.cpp 
              rpc_controller.cpp
-             rpc_logger.cpp)
+             rpc_logger.cpp
+             util_zookeeper.cpp)
 add_library(rpc ${SRC_LIST})
-target_link_libraries(rpc muduo_net muduo_base pthread)
+target_link_libraries(rpc muduo_net muduo_base pthread zookeeper_mt)
