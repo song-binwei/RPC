@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
         }
     }
     
-
     // rpc请求参数和响应参数定义
     fixbug::RegistRequest regist_request;
     regist_request.set_id(1000);
@@ -75,8 +74,5 @@ int main(int argc, char** argv) {
     } else {
         std::cout << "RPC friends response error : " << friends_response.success() << std::endl;
     }
-
-
-
     return 0;
 }
