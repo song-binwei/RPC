@@ -15,7 +15,9 @@ C++、protobuf、muduo、ZooKeeper
 
 ![](https://github.com/song-binwei/RPC/blob/main/img/RPC%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 
-### 目录树
+
+
+## 目录树
 
 ```
 .
@@ -64,3 +66,34 @@ C++、protobuf、muduo、ZooKeeper
 └── test
 ```
 
+## 项目代码交互过程
+
+RPC服务提供方：
+
+1、初始化服务，读取配置文件init.conf，获取的RPC服务发布的IP和Port（远程方法将要发布的地址和端口），ZooKeeper的IP和Port。
+
+2、维护一个unordered_map表存储存储注册成功的服务名字和服务的信息。
+
+3、通过util_zookeeper中相关方法，向ZooKeeper注册服务和方法发布的IP和Port。
+
+4、使用muduo网络库创建4个线程，一个I/O线程等待连接，3个工作线程处理请求并返回，绑定回调函数，启动服务节点。
+
+5、等待接收远程的请求。
+
+6、如果有请求过来，反序列化请求参数，根据参数调用具体方法，得到返回，再次序列化响应，网络发送给服务调用方。
+
+RPC服务调用方：
+
+1、初始化，读取配置文件init.conf，获取ZooKeeper的IP和Port
+
+2、创建远程服务对象，定义RPC请求参数和响应参数
+
+3、发起RPC的调用，同步的调用 wait结果，调用服务对象的具体方法。
+
+4、进入RpcChannelMethod::CallMethod方法（通过Stub代理对象的方法，最后都在这里进行调用，统一做序列化和网络发送）
+
+5、返回RPC响应，关闭连接
+
+交互过程如图所示：
+
+![](https://github.com/song-binwei/RPC/blob/main/img/RPC%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92%E5%9B%BE.png)
