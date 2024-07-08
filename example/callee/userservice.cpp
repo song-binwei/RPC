@@ -8,7 +8,7 @@
 #include "rpc_logger.h"
 
 /*
-发布本地的方法为远程的RPC方法
+发布方：发布本地的方法为远程的RPC方法
 */
 
 // 本地的一个类UserService下有2个方法

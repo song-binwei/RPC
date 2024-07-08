@@ -17,3 +17,76 @@
 15:37:7 => [INFO] zookeeper_init success !
 15:37:7 => [INFO] ZooKeeper success!
 15:37:7 => [INFO] RpcProvider start! ip : 127.0.0.1 port : 8000
+16:47:52 => [INFO] RPC init!
+16:47:52 => [INFO] server name : UserServiceRPC
+16:47:52 => [INFO] method name : Login
+16:47:52 => [INFO] method name : Regist
+16:47:52 => [INFO] server name : GetFriendsListServiceRPC
+16:47:52 => [INFO] method name : GetFriendsList
+16:47:52 => [INFO] ZooKeeper start!
+16:47:52 => [INFO] zookeeper_init success !
+16:47:52 => [INFO] ZooKeeper success!
+16:47:52 => [INFO] znode create success... path : /GetFriendsListServiceRPC/GetFriendsList
+16:47:52 => [INFO] znode create success... path : /UserServiceRPC/Regist
+16:47:52 => [INFO] znode create success... path : /UserServiceRPC/Login
+16:47:52 => [INFO] RpcProvider start! ip : 127.0.0.1 port : 8000
+16:48:5 => [INFO] zookeeper_init success !
+16:48:5 => [INFO] ZooKeeper success!
+16:48:5 => [INFO] GetData path : /UserServiceRPC/Login
+16:47:52 => [INFO] ====================rpc provider====================
+16:48:5 => [INFO] header_size : 25
+16:48:5 => [INFO] args_size : 21
+16:48:5 => [INFO] service_name : UserServiceRPC
+16:48:5 => [INFO] method_name : Login
+16:48:5 => [INFO] ====================================================
+16:48:5 => [INFO] zookeeper_init success !
+16:48:5 => [INFO] ZooKeeper success!
+16:48:5 => [INFO] GetData path : /UserServiceRPC/Regist
+16:48:5 => [INFO] ====================rpc provider====================
+16:48:5 => [INFO] header_size : 26
+16:48:5 => [INFO] args_size : 16
+16:48:5 => [INFO] service_name : UserServiceRPC
+16:48:5 => [INFO] method_name : Regist
+16:48:5 => [INFO] ====================================================
+16:48:5 => [INFO] zookeeper_init success !
+16:48:5 => [INFO] ZooKeeper success!
+16:48:5 => [INFO] GetData path : /GetFriendsListServiceRPC/GetFriendsList
+16:48:5 => [INFO] ====================rpc provider====================
+16:48:5 => [INFO] header_size : 44
+16:48:5 => [INFO] args_size : 3
+16:48:5 => [INFO] service_name : GetFriendsListServiceRPC
+16:48:5 => [INFO] method_name : GetFriendsList
+16:48:5 => [INFO] ====================================================
+16:48:29 => [INFO] zookeeper_init success !
+16:48:29 => [INFO] ZooKeeper success!
+16:48:29 => [INFO] GetData path : /UserServiceRPC/Login
+16:48:5 => [INFO] ====================rpc provider====================
+16:48:29 => [INFO] header_size : 25
+16:48:29 => [INFO] args_size : 21
+16:48:29 => [INFO] service_name : UserServiceRPC
+16:48:29 => [INFO] method_name : Login
+16:48:29 => [INFO] ====================================================
+16:48:29 => [INFO] zookeeper_init success !
+16:48:29 => [INFO] ZooKeeper success!
+16:48:29 => [INFO] GetData path : /UserServiceRPC/Regist
+16:48:29 => [INFO] ====================rpc provider====================
+16:48:29 => [INFO] header_size : 26
+16:48:29 => [INFO] args_size : 16
+16:48:29 => [INFO] service_name : UserServiceRPC
+16:48:29 => [INFO] method_name : Regist
+16:48:29 => [INFO] ====================================================
+16:48:29 => [INFO] zookeeper_init success !
+16:48:29 => [INFO] ZooKeeper success!
+16:48:29 => [INFO] GetData path : /GetFriendsListServiceRPC/GetFriendsList
+16:48:29 => [INFO] ====================rpc provider====================
+16:48:29 => [INFO] header_size : 44
+16:48:29 => [INFO] args_size : 3
+16:48:29 => [INFO] service_name : GetFriendsListServiceRPC
+16:48:29 => [INFO] method_name : GetFriendsList
+16:48:29 => [INFO] ====================================================
+16:50:11 => [INFO] zookeeper_init success !
+16:50:11 => [INFO] ZooKeeper success!
+16:50:11 => [INFO] GetData path : /UserServiceRPC/Login
+16:50:11 => [INFO] zookeeper_init success !
+16:50:11 => [INFO] ZooKeeper success!
+16:50:11 => [INFO] GetData path : /UserServiceRPC/Regist

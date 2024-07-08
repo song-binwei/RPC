@@ -3,14 +3,16 @@
 #include "user.pb.h"
 #include "friend.pb.h"
 
-
+/*
+调用方：调用RPC方法
+*/
 
 int main(int argc, char** argv) {
 
     // 程序启动首先需要初始化，调用框架的初始化函数
     RpcApplication::Init(argc, argv);
     
-    // 调用远程发布的方法
+    // 创建远程服务对象
     fixbug::UserServiceRPC_Stub stub(new RpcChannelMethod());
 
     // rpc请求参数和响应参数定义
@@ -19,7 +21,7 @@ int main(int argc, char** argv) {
     request.set_pwd("123456");
     fixbug::LoginResponse response;
 
-    // 发起RPC的调用，同步的调用 wait结果
+    // 发起RPC的调用，同步的调用 wait结果，调用服务对象的具体方法Login
     RpcController controller;
     stub.Login(&controller, &request, &response, nullptr);
 
@@ -39,10 +41,10 @@ int main(int argc, char** argv) {
     fixbug::RegistRequest regist_request;
     regist_request.set_id(1000);
     regist_request.set_name("RPC");
-    regist_request.set_pwd("666666");
+    regist_request.set_pwd("abcd@1234");
     fixbug::RegistResponse regist_response;
 
-    // 发起RPC的调用，同步的调用 wait结果
+    // 发起RPC的调用，同步的调用 wait结果，调用服务对象的具体方法Login
     stub.Regist(nullptr, &regist_request, &regist_response, nullptr);
 
     // 一次RPC调用成功，读取结果
@@ -74,5 +76,6 @@ int main(int argc, char** argv) {
     } else {
         std::cout << "RPC friends response error : " << friends_response.success() << std::endl;
     }
+
     return 0;
 }

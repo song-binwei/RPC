@@ -55,13 +55,13 @@ void RpcChannelMethod::CallMethod(const google::protobuf::MethodDescriptor* meth
     send_rpc_str += args_str;
 
     // 打印调试信息
-    std::cout << "===============================================" << std::endl;
+    std::cout << "==================RPC Call==================" << std::endl;
     std::cout << "header_size : " << header_size << std::endl;
     std::cout << "service_name : " << service_name << std::endl;
     std::cout << "method_name : " << method_name << std::endl;
     std::cout << "args_size : " << args_size << std::endl;
     std::cout << "args_str : " << args_str << std::endl;
-    std::cout << "===============================================" << std::endl;
+    std::cout << "============================================" << std::endl;
 
     int clientFd = socket(AF_INET, SOCK_STREAM, 0);
     if (clientFd == -1) {
@@ -73,6 +73,7 @@ void RpcChannelMethod::CallMethod(const google::protobuf::MethodDescriptor* meth
     // 获取RPC服务的地址和端口
     // std::string ip = RpcApplication::GetInstance().GetConfig().Load("rpcserverip");
     // uint16_t port = atoi(RpcApplication::GetInstance().GetConfig().Load("rpcserverport").c_str());
+    // 通过ZooKeeper获取
     ZkClient zkCli;
     zkCli.Start();
     std::string method_path = "/" + service_name + "/" + method_name;
@@ -91,8 +92,6 @@ void RpcChannelMethod::CallMethod(const google::protobuf::MethodDescriptor* meth
     std::string ip = host_data.substr(0, idx);
     uint16_t port = atoi(host_data.substr(idx + 1, host_data.size() - idx).c_str());
  
-
-    
     // 设置发起网络请求需要的port和address
     struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
