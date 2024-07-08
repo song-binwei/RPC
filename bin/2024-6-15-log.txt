@@ -1,6 +1,0 @@
-13:3:17 => [info] fist one log !
-13:3:17 => [error] /home/song/rpc/example/callee/userservice.cpp:113
-13:8:52 => [info] fist one log !
-13:8:52 => [error] /home/song/rpc/example/callee/userservice.cpp:113
-13:9:32 => [info] fist one log !
-13:9:32 => [error] /home/song/rpc/example/callee/userservice.cpp:113

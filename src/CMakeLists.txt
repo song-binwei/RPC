@@ -8,4 +8,5 @@ set(SRC_LIST rpc_config.cpp
              rpc_logger.cpp
              util_zookeeper.cpp)
 add_library(rpc ${SRC_LIST})
+# pthread库
 target_link_libraries(rpc muduo_net muduo_base pthread zookeeper_mt)

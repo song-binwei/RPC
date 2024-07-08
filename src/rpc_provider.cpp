@@ -2,16 +2,15 @@
 #include "rpc_application.h"
 #include "rpc_header.pb.h"
 #include "util_zookeeper.h"
+#include "rpc_logger.h"
 
 // 发布RPC方法的函数接口
-
 /*
 server_name -> server信息
                         -> server对象的指针
                         -> 方法的集合。
 
 */
-
 void RpcProvider::NotifyService(google::protobuf::Service *service) {
 
     ServiceInfo service_info;
@@ -21,7 +20,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service) {
     std::string server_name = serviceDes->name();
     // 服务对象拥有的方法总数
     int methodCnt = serviceDes->method_count();
-    std::cout << "server name : " << server_name << std::endl;
+    LOG_INFO("server name : %s", server_name.c_str());
     // 遍历方法
     for (int i = 0; i < methodCnt; i++) {
         // 方法对象的描述
@@ -29,19 +28,19 @@ void RpcProvider::NotifyService(google::protobuf::Service *service) {
         // 方法对象的名字
         std::string method_name = methodDes->name();
         service_info.m_methodMap.insert({method_name, methodDes});
-        std::cout << "method name : " << method_name << std::endl;
+        LOG_INFO("method name : %s", method_name.c_str());
     }
     service_info.m_service = service;
     m_serviceMap.insert({server_name, service_info});
-
 }
 
 // 启动RPC服务节点，开始提供RPC远程网络调用服务
 void RpcProvider::Run() {
+    // 获取RPC服务启动的IP地址和端口号
     std::string ip = RpcApplication::GetInstance().GetConfig().Load("rpcserverip");
     uint16_t port = atoi(RpcApplication::GetInstance().GetConfig().Load("rpcserverport").c_str());
+    
     muduo::net::InetAddress address(ip, port);
-
     // 创建TcpServer对象
     muduo::net::TcpServer server(&m_eventLoop, address, "RpcProvider");
     // 绑定连接的回调和消息的回调，分离网络和业务的代码
@@ -53,6 +52,7 @@ void RpcProvider::Run() {
 
     // 把当前RPC节点上要发布的服务全部注册到zk上面，让rpc client可以从zk上发现服务
     // session timeout   30s     zkclient 网络I/O线程  1/3 * timeout 时间发送ping消息
+    LOG_INFO("ZooKeeper start!");
     ZkClient zkCli;
     zkCli.Start();
     // 注册service_name为永久性节点    method_name为临时性节点
@@ -70,13 +70,11 @@ void RpcProvider::Run() {
             zkCli.Create(method_path.c_str(), method_data, strlen(method_data), ZOO_EPHEMERAL);
         } 
     }
-    
     // 启动服务
     server.start();
-    std::cout << "RpcProvider start " << "ip : " << ip << " port : " << port << std::endl;
+    LOG_INFO("RpcProvider start! ip : %s port : %d", ip.c_str(), port);
     // 等待连接
     m_eventLoop.loop();
-
 }
 
 // 新的socket连接的回调函数
@@ -86,6 +84,7 @@ void RpcProvider::OnConnection(const muduo::net::TcpConnectionPtr &conn) {
         conn->shutdown();
     }
 }
+
 // 在框架中RpcProvider和RpcConsumer协商protobuf数据类型
 // service_name method_name args
 
@@ -112,42 +111,43 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
         method_name = rpcHeader.method_name();
         args_size = rpcHeader.args_size();
     } else {
-        std::cout << "rpc header : " << header_str << "parse error!" << std::endl;
+        LOG_ERR("rpc header : %s parse error!", header_str.c_str());
         return;
     }
     // 获取方法的参数原始字符串
     std::string args_str = recv_buf.substr(4 + header_size, args_size);
 
-    // 打印调试信息
-    std::cout << "====================rpc provider====================" << std::endl;
-    std::cout << "header_size : " << header_size << std::endl;
-    std::cout << "service_name : " << service_name << std::endl;
-    std::cout << "method_name : " << method_name << std::endl;
-    std::cout << "args_size : " << args_size << std::endl;
-    std::cout << "args_str : " << args_str << std::endl;
-    std::cout << "====================================================" << std::endl;
+    // 记录被调用方法
+    LOG_INFO("====================rpc provider====================");
+    LOG_INFO("header_size : %d", header_size);
+    LOG_INFO("args_size : %d", args_size);
+    LOG_INFO("service_name : %s", service_name.c_str());
+    LOG_INFO("method_name : %s", method_name.c_str());
+    LOG_INFO("====================================================");
 
     // 获取service对象和Method对象
     auto service_item = m_serviceMap.find(service_name);
     if (service_item == m_serviceMap.end()) {
-        std::cout << service_name << " is not exist !" << std::endl;
+        LOG_ERR("%s is not exist !", service_name.c_str());
         return;
     }
     
     auto method_item = service_item->second.m_methodMap.find(method_name);
     if (method_item == service_item->second.m_methodMap.end()) {
-        std::cout << service_name << ":" << method_name << " is not exist !" << std::endl;
+        LOG_ERR("%s : %s is not exist !", service_name.c_str(), method_name.c_str());
         return;
     }
+
     google::protobuf::Service *service = service_item->second.m_service; // 获取service对象
     const google::protobuf::MethodDescriptor *method = method_item->second; // 获取method对象
 
     // 生成rpc调用的请求request和响应response参数
     google::protobuf::Message *request = service->GetRequestPrototype(method).New();
     if (!request->ParseFromString(args_str)) {
-        std::cout << "args_str : " << args_str << " parse error !" << std::endl;
+        LOG_ERR("args_str : %s parse error !", args_str.c_str());
         return;
     }
+
     google::protobuf::Message *response = service->GetResponsePrototype(method).New();
     
     // 给下面的method方法的调用，绑定一个Closure的回调函数
@@ -159,7 +159,6 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
                                                                     conn,
                                                                     response);
     // 在框架上根据远端的请求，调用相应的方法处理
-    // void Login(controller, request, response, done)
     service->CallMethod(method, nullptr, request, response, done);
 }
 
@@ -170,7 +169,7 @@ void RpcProvider::SendRpcResponse(const muduo::net::TcpConnectionPtr& conn, goog
         // 序列化成功后，通过网络将rpc方法的结果发送给对方
         conn->send(response_str);
     } else {
-        std::cout << "serialize response_str error !" << std::endl;
+        LOG_ERR("serialize response_str error !");
     }
     // 关闭连接，模拟HTTP短连接
     conn->shutdown();

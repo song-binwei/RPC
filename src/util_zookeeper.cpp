@@ -1,7 +1,9 @@
-#include "util_zookeeper.h"
-#include "rpc_application.h"
 #include <iostream>
 #include <string>
+#include "util_zookeeper.h"
+#include "rpc_application.h"
+#include "rpc_logger.h"
+
 
 // 全局的watcher观察器，zkserver给zkclient的通知
 void globalWatcher(zhandle_t *zh, int type, int state, const char *path, void *watcherCtx) 
@@ -18,6 +20,7 @@ ZkClient::ZkClient() : m_zhandle(nullptr)
 {
 
 }
+
 ZkClient::~ZkClient()
 {
     if (m_zhandle != nullptr) 
@@ -25,6 +28,7 @@ ZkClient::~ZkClient()
         zookeeper_close(m_zhandle);   // 关闭句柄释放资源
     }
 }
+
 // zkclient启动连接zkserver
 void ZkClient::Start()
 {
@@ -42,7 +46,7 @@ void ZkClient::Start()
     m_zhandle = zookeeper_init(connstr.c_str(), globalWatcher, 30000, nullptr, nullptr, 0);
     if (m_zhandle == nullptr)
     {
-        std::cout << "zookeeper_init error !" << std::endl;
+        LOG_ERR("zookeeper_init error !");
         exit(EXIT_FAILURE);
     }
 
@@ -51,8 +55,10 @@ void ZkClient::Start()
     zoo_set_context(m_zhandle, &sem);
 
     sem_wait(&sem);
-    std::cout << "zookeeper_init success !" << std::endl;
+    LOG_INFO("zookeeper_init success !");
+    LOG_INFO("ZooKeeper success!");
 }
+
 // 在zkserver上根据指定的path创建znode节点
 void ZkClient::Create(const char *path, const char *data, int datalen, int state)
 {
@@ -66,27 +72,28 @@ void ZkClient::Create(const char *path, const char *data, int datalen, int state
         ret = zoo_create(m_zhandle, path, data, datalen, &ZOO_OPEN_ACL_UNSAFE, state, path_buf, buf_len);
         if (ret == ZOK)
         {
-            std::cout << "znode create success... path : " << path << std::endl;
+            LOG_INFO("znode create success... path : %s", path);
         }
         else
         {
-            std::cout << "ret : " << ret << std::endl;
-            std::cout << "znode create error... path : " << path << std::endl;
+            LOG_ERR("return : %d", ret);
+            LOG_ERR("znode create error... path : %s", path);
             exit(EXIT_FAILURE);
         }
 
     }
 }
+
 // 根据参数指定的znode节点路径，获取znode节点的值
 std::string ZkClient::GetData(const char *path)
 {
     char buf[128];
     int buf_len = sizeof(buf);
-    std::cout << "GetData path : " << path << std::endl;
+    LOG_INFO("GetData path : %s", path);
     int ret = zoo_get(m_zhandle, path, 0, buf, &buf_len, nullptr);
     if (ret != ZOK) 
     {
-        std::cout << "get znode error... path : " << path << std::endl;
+        LOG_ERR("get znode error... path : %s", path);
         return "";
     }
     else 

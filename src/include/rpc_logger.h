@@ -14,8 +14,6 @@ class Logger {
 public:
     static Logger& GetInstance();
     void Log(LogLevel, std::string message);
-
-
 private:
     LockQueue<std::pair<LogLevel, std::string>> m_lockQueue;   // 设置日志的缓冲队列 包含日志的级别和日志信息
     Logger();

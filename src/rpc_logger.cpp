@@ -36,23 +36,23 @@ Logger::Logger() {
             std::string msg = log_element.second;
 
             char time_buf[128] = {0};
-            std::cout << "m_logLevel : " << level << std::endl;
+            // std::cout << "m_logLevel : " << level << std::endl;
             sprintf(time_buf, "%d:%d:%d => [%s] ", 
                                     nowtm->tm_hour, 
                                     nowtm->tm_min, 
                                     nowtm->tm_sec, 
-                                    (level == LogLevel::INFO ? "info" : "error"));
+                                    (level == LogLevel::INFO ? "INFO" : "ERROR"));
 
             msg.insert(0, time_buf);
+            // 行的末尾加上换行符
             msg.append("\n");
-
+            
             fputs(msg.c_str(), pf);
             fclose(pf);
         }
     });
     // 设置分离线程，守护线程
     writeLogTask.detach();
-
 }
 
 
