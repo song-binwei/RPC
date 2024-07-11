@@ -47,7 +47,7 @@ C++、protobuf、muduo、ZooKeeper
 │   ├── include
 │   │   ├── rpc_application.h    框架初始化模块
 │   │   ├── rpc_channel.h        服务调用模块
-│   │   ├── rpc_config.h     解析配置文件模块
+│   │   ├── rpc_config.h         解析配置文件模块
 │   │   ├── rpc_controller.h     调用控制模块
 │   │   ├── rpc_header.pb.h      框架请求头
 │   │   ├── rpc_lockqueue.hpp    日志队列
