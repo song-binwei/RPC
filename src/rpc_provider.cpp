@@ -9,7 +9,6 @@
 server_name -> server信息
                         -> server对象的指针
                         -> 方法的集合。
-
 */
 void RpcProvider::NotifyService(google::protobuf::Service *service) {
 
@@ -68,7 +67,7 @@ void RpcProvider::Run() {
             char method_data[128] = {0};
             sprintf(method_data, "%s:%d", ip.c_str(), port);
             zkCli.Create(method_path.c_str(), method_data, strlen(method_data), ZOO_EPHEMERAL);
-        } 
+        }
     }
     // 启动服务
     server.start();
@@ -92,7 +91,7 @@ void RpcProvider::OnConnection(const muduo::net::TcpConnectionPtr &conn) {
 void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn, 
                             muduo::net::Buffer *buf,
                             muduo::Timestamp timestamp) {
-    // 远程RPC调用的字符数据 Login args 方法名和参数都要有
+    // 远程RPC调用的字符数据 Login args 方法名和参数都要有 得到请求的数据
     std::string recv_buf = buf->retrieveAllAsString();
     // 从字符流中读取前4个字节的首部长度
     uint32_t header_size = 0;
@@ -120,9 +119,9 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     // 记录被调用方法
     LOG_INFO("====================rpc provider====================");
     LOG_INFO("header_size : %d", header_size);
-    LOG_INFO("args_size : %d", args_size);
     LOG_INFO("service_name : %s", service_name.c_str());
     LOG_INFO("method_name : %s", method_name.c_str());
+    LOG_INFO("args_size : %d", args_size);
     LOG_INFO("====================================================");
 
     // 获取service对象和Method对象
@@ -141,7 +140,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     google::protobuf::Service *service = service_item->second.m_service; // 获取service对象
     const google::protobuf::MethodDescriptor *method = method_item->second; // 获取method对象
 
-    // 生成rpc调用的请求request和响应response参数
+    // 生成rpc调用的请求request和响应response参数 反射
     google::protobuf::Message *request = service->GetRequestPrototype(method).New();
     if (!request->ParseFromString(args_str)) {
         LOG_ERR("args_str : %s parse error !", args_str.c_str());

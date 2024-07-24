@@ -50,9 +50,9 @@ void RpcChannelMethod::CallMethod(const google::protobuf::MethodDescriptor* meth
 
     // 组织待发送的字符串 header_size + service_name method_name args_size + args
     std::string send_rpc_str;
-    send_rpc_str.insert(0, std::string((char*)&header_size, 4));
-    send_rpc_str += rpc_header_str;
-    send_rpc_str += args_str;
+    send_rpc_str.insert(0, std::string((char*)&header_size, 4));  // 请求头的长度
+    send_rpc_str += rpc_header_str; // 请求头的序列化
+    send_rpc_str += args_str;       // 参数的序列化
 
     // 打印调试信息
     std::cout << "==================RPC Call==================" << std::endl;
